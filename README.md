@@ -1,14 +1,9 @@
-Here’s your **formal, polished README** for the VoiceGuard Shield project:
 
 ---
 
 # VoiceGuard Shield 🎙️🛡️
 
 *Real-time Voice Scam Detection & Anti-Spoofing Protection*
-
-[![License](https://img.shields.io/github/license/yourusername/voiceguard-shield?style=flat-square)](LICENSE)
-[![Issues](https://img.shields.io/github/issues/yourusername/voiceguard-shield?style=flat-square)](https://github.com/yourusername/voiceguard-shield/issues)
-[![Stars](https://img.shields.io/github/stars/yourusername/voiceguard-shield?style=flat-square)](https://github.com/yourusername/voiceguard-shield/stargazers)
 
 ---
 
