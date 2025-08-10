@@ -1,148 +1,166 @@
+# VoiceGuard Shield
+
+VoiceGuard Shield is an advanced voice authentication and security solution designed to integrate robust voice-based user verification into web applications. Built primarily with TypeScript, it leverages modern frontend tooling for scalability, maintainability, and security.
+
+## Table of Contents
+
+- [Features](#features)
+- [Architecture Overview](#architecture-overview)
+- [Directory Structure](#directory-structure)
+- [Getting Started](#getting-started)
+- [Configuration](#configuration)
+- [Usage](#usage)
+- [Development](#development)
+- [Contributing](#contributing)
+- [License](#license)
+- [Contact](#contact)
 
 ---
 
-# VoiceGuard Shield 🎙️🛡️
+## Features
 
-*Real-time Voice Scam Detection & Anti-Spoofing Protection*
-
----
-
-## 📌 Overview
-
-**VoiceGuard Shield** is a **real-time voice security system** that detects and prevents phone scams & spoofed audio.
-It uses **WebRTC** for audio streaming, a **FastAPI backend** for analysis, and **AI models** for:
-
-* **Anti-Spoofing Detection** (prevents deepfake/AI-generated voices)
-* **Scam Intent Detection** (flags fraudulent conversation patterns)
-
-Built for **speed, accuracy, and privacy**, VoiceGuard Shield can be integrated into customer support systems, call centers, or personal devices.
+- **Biometric Voice Authentication**: Secure access via unique user voiceprints.
+- **Real-Time Verification**: Immediate user validation and feedback.
+- **Modern UI**: Responsive design with Tailwind CSS for seamless UX.
+- **Extensible Components**: Modular architecture for easy feature expansion.
+- **Comprehensive Logging**: Track authentication attempts and activity.
 
 ---
 
-## ✨ Features
+## Architecture Overview
 
-* 🎤 **Real-Time Audio Streaming** with WebRTC
-* 🔍 **AI-based Anti-Spoof Detection**
-* ⚠️ **Scam Intent Detection** using NLP models
-* 📊 **Live Analysis Dashboard**
-* 🔒 **Privacy-Friendly** — local processing for sensitive data
-* 🌐 **Cross-Platform** (Web, Desktop, or Embedded Systems)
+VoiceGuard Shield is a TypeScript-based project utilizing modern web technologies:
 
----
-
-## 🛠 Tech Stack
-
-### Frontend
-
-* **Vite + React + TypeScript**
-* **TailwindCSS** + **shadcn/ui** components
-* WebRTC audio capture and streaming
-
-### Backend
-
-* **FastAPI** for API endpoints
-* **WebSockets** for low-latency audio transfer
-* **PyTorch** (Anti-spoofing model)
-* **Scikit-learn** (Scam intent classifier)
+- **Frontend**: Built with Vite for fast build times and hot reloading.
+- **Styling**: Tailwind CSS and PostCSS for customizable and scalable styles.
+- **Component System**: Modular components (see `components.json`) for UI and logic separation.
+- **Configuration**: TypeScript config files for strict type-checking and project structure.
+- **Build Tools**: Bun, Vite, and ESLint for package management, builds, and code linting.
 
 ---
 
-## 📂 Folder Structure
+## Directory Structure
 
-```plaintext
+```
 voiceguard-shield/
-│
-├── backend/              # FastAPI app & ML models
-│   ├── models/           # AI models (anti-spoof, scam intent)
-│   ├── api/              # API endpoints
-│   ├── utils/            # Audio processing utilities
-│   └── main.py           # Backend entry point
-│
-├── frontend/             # Vite + React + TailwindCSS app
-│   ├── src/
-│   │   ├── components/   # UI components
-│   │   ├── pages/        # React pages
-│   │   ├── hooks/        # Custom hooks
-│   │   └── App.tsx       # App root
-│
-├── dataset/              # Synthetic dataset for training/testing
-├── scripts/              # Training & testing scripts
-├── README.md             # Project documentation
-└── requirements.txt      # Python dependencies
+├── public/                   # Static assets
+├── src/                      # Main application source code
+│   └── ...                   # (Details of modules inside src/)
+├── components.json           # Component registry/definitions
+├── index.html                # Entry HTML file
+├── package.json              # Project dependencies and scripts
+├── bun.lockb                 # Bun package manager lock file
+├── tailwind.config.ts        # Tailwind CSS configuration
+├── postcss.config.js         # PostCSS configuration
+├── eslint.config.js          # ESLint configuration
+├── tsconfig.json             # TypeScript global config
+├── tsconfig.app.json         # TypeScript app-specific config
+├── tsconfig.node.json        # TypeScript node-specific config
+├── vite.config.ts            # Vite build config
+└── .gitignore                # Git ignore rules
 ```
 
 ---
 
-## 🚀 Installation
+## Getting Started
 
-### 1️⃣ Clone the Repository
+### Prerequisites
 
-```bash
-git clone https://github.com/yourusername/voiceguard-shield.git
-cd voiceguard-shield
-```
+- **Node.js** (or Bun runtime) installed
+- **Git** for version control
+- A microphone/audio input device for voice capture
 
-### 2️⃣ Backend Setup
+### Installation
 
-```bash
-cd backend
-python -m venv venv
-source venv/bin/activate   # On Windows: venv\Scripts\activate
-pip install -r requirements.txt
-```
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/raja2576/voiceguard-shield.git
+   cd voiceguard-shield
+   ```
 
-Run the backend:
+2. **Install dependencies:**
+   ```bash
+   bun install
+   # or, if using npm:
+   npm install
+   ```
 
-```bash
-uvicorn main:app --reload
-```
+3. **Configure environment:**  
+   Review and adjust configuration files (`tailwind.config.ts`, `vite.config.ts`, etc.) as needed.
 
-### 3️⃣ Frontend Setup
+4. **Run the development server:**
+   ```bash
+   bun run dev
+   # or
+   npm run dev
+   ```
 
-```bash
-cd frontend
-npm install
-npm run dev
-```
-
----
-
-## 🎯 Usage
-
-1. Start **backend server** (FastAPI)
-2. Start **frontend app** (Vite + React)
-3. Allow **microphone access** in your browser
-4. Speak into your microphone — the system will:
-
-   * Detect **spoofed voices**
-   * Flag **scam-like phrases** in real time
-5. View results in the **dashboard**
+5. **Build for production:**
+   ```bash
+   bun run build
+   # or
+   npm run build
+   ```
 
 ---
 
-## 🧠 Models
+## Configuration
 
-### Anti-Spoof Model
-
-* **Tiny CNN-based PyTorch model** trained on synthetic & real voice samples
-
-### Scam Intent Model
-
-* **Logistic Regression** trained on scam phrase dataset
-
-Both models are lightweight and optimized for real-time inference.
+- **Tailwind CSS**: Customize design tokens in `tailwind.config.ts`.
+- **Vite**: Set up build and server options in `vite.config.ts`.
+- **ESLint**: Adjust linting rules in `eslint.config.js`.
+- **TypeScript**: Type checking configurations in `tsconfig*.json` files.
+- **Components**: Register or configure UI logic in `components.json`.
 
 ---
 
-## 📸 Screenshots
+## Usage
 
-*(Add screenshots after running the app)*
-![Dashboard Example](docs/dashboard.png)
-![Detection Result](docs/detection_result.png)
+After setup, access the app in your browser.  
+- Enroll user voiceprints and test authentication flows.
+- Integrate with additional APIs or backend systems as needed.
+
+Refer to inline documentation in the `src/` directory for extending core features or adding new components.
 
 ---
 
+## Development
+
+- **Lint code:**  
+  ```bash
+  bun run lint
+  # or
+  npm run lint
+  ```
+- **Format code:**  
+  Use Prettier or configure your editor for automatic formatting.
+- **Write tests:**  
+  (Add your preferred testing framework and describe here.)
 
 ---
 
+## Contributing
 
+Contributions are welcome!  
+1. Fork the repository.  
+2. Create a feature branch: `git checkout -b feature/your-feature`  
+3. Commit your changes: `git commit -am 'Add some feature'`  
+4. Push to the branch: `git push origin feature/your-feature`  
+5. Open a Pull Request.
+
+For major changes, open an issue to discuss first.
+
+---
+
+## License
+
+This project is currently unlicensed.  
+(Consider adding a [LICENSE](LICENSE) file.)
+
+---
+
+## Contact
+
+Maintained by [raja2576](https://github.com/raja2576).
+
+For issues or feature requests, please use the [GitHub Issues](https://github.com/raja2576/voiceguard-shield/issues) page.
