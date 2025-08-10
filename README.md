@@ -1,73 +1,153 @@
-# Welcome to your Lovable project
+Here’s your **formal, polished README** for the VoiceGuard Shield project:
 
-## Project info
+---
 
-**URL**: https://lovable.dev/projects/3802b2bc-0bd9-44d4-bcad-923fe6c22e68
+# VoiceGuard Shield 🎙️🛡️
 
-## How can I edit this code?
+*Real-time Voice Scam Detection & Anti-Spoofing Protection*
 
-There are several ways of editing your application.
+[![License](https://img.shields.io/github/license/yourusername/voiceguard-shield?style=flat-square)](LICENSE)
+[![Issues](https://img.shields.io/github/issues/yourusername/voiceguard-shield?style=flat-square)](https://github.com/yourusername/voiceguard-shield/issues)
+[![Stars](https://img.shields.io/github/stars/yourusername/voiceguard-shield?style=flat-square)](https://github.com/yourusername/voiceguard-shield/stargazers)
 
-**Use Lovable**
+---
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/3802b2bc-0bd9-44d4-bcad-923fe6c22e68) and start prompting.
+## 📌 Overview
 
-Changes made via Lovable will be committed automatically to this repo.
+**VoiceGuard Shield** is a **real-time voice security system** that detects and prevents phone scams & spoofed audio.
+It uses **WebRTC** for audio streaming, a **FastAPI backend** for analysis, and **AI models** for:
 
-**Use your preferred IDE**
+* **Anti-Spoofing Detection** (prevents deepfake/AI-generated voices)
+* **Scam Intent Detection** (flags fraudulent conversation patterns)
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+Built for **speed, accuracy, and privacy**, VoiceGuard Shield can be integrated into customer support systems, call centers, or personal devices.
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+---
 
-Follow these steps:
+## ✨ Features
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+* 🎤 **Real-Time Audio Streaming** with WebRTC
+* 🔍 **AI-based Anti-Spoof Detection**
+* ⚠️ **Scam Intent Detection** using NLP models
+* 📊 **Live Analysis Dashboard**
+* 🔒 **Privacy-Friendly** — local processing for sensitive data
+* 🌐 **Cross-Platform** (Web, Desktop, or Embedded Systems)
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+---
 
-# Step 3: Install the necessary dependencies.
-npm i
+## 🛠 Tech Stack
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+### Frontend
+
+* **Vite + React + TypeScript**
+* **TailwindCSS** + **shadcn/ui** components
+* WebRTC audio capture and streaming
+
+### Backend
+
+* **FastAPI** for API endpoints
+* **WebSockets** for low-latency audio transfer
+* **PyTorch** (Anti-spoofing model)
+* **Scikit-learn** (Scam intent classifier)
+
+---
+
+## 📂 Folder Structure
+
+```plaintext
+voiceguard-shield/
+│
+├── backend/              # FastAPI app & ML models
+│   ├── models/           # AI models (anti-spoof, scam intent)
+│   ├── api/              # API endpoints
+│   ├── utils/            # Audio processing utilities
+│   └── main.py           # Backend entry point
+│
+├── frontend/             # Vite + React + TailwindCSS app
+│   ├── src/
+│   │   ├── components/   # UI components
+│   │   ├── pages/        # React pages
+│   │   ├── hooks/        # Custom hooks
+│   │   └── App.tsx       # App root
+│
+├── dataset/              # Synthetic dataset for training/testing
+├── scripts/              # Training & testing scripts
+├── README.md             # Project documentation
+└── requirements.txt      # Python dependencies
+```
+
+---
+
+## 🚀 Installation
+
+### 1️⃣ Clone the Repository
+
+```bash
+git clone https://github.com/yourusername/voiceguard-shield.git
+cd voiceguard-shield
+```
+
+### 2️⃣ Backend Setup
+
+```bash
+cd backend
+python -m venv venv
+source venv/bin/activate   # On Windows: venv\Scripts\activate
+pip install -r requirements.txt
+```
+
+Run the backend:
+
+```bash
+uvicorn main:app --reload
+```
+
+### 3️⃣ Frontend Setup
+
+```bash
+cd frontend
+npm install
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+---
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## 🎯 Usage
 
-**Use GitHub Codespaces**
+1. Start **backend server** (FastAPI)
+2. Start **frontend app** (Vite + React)
+3. Allow **microphone access** in your browser
+4. Speak into your microphone — the system will:
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+   * Detect **spoofed voices**
+   * Flag **scam-like phrases** in real time
+5. View results in the **dashboard**
 
-## What technologies are used for this project?
+---
 
-This project is built with:
+## 🧠 Models
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+### Anti-Spoof Model
 
-## How can I deploy this project?
+* **Tiny CNN-based PyTorch model** trained on synthetic & real voice samples
 
-Simply open [Lovable](https://lovable.dev/projects/3802b2bc-0bd9-44d4-bcad-923fe6c22e68) and click on Share -> Publish.
+### Scam Intent Model
 
-## Can I connect a custom domain to my Lovable project?
+* **Logistic Regression** trained on scam phrase dataset
 
-Yes, you can!
+Both models are lightweight and optimized for real-time inference.
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+---
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+## 📸 Screenshots
+
+*(Add screenshots after running the app)*
+![Dashboard Example](docs/dashboard.png)
+![Detection Result](docs/detection_result.png)
+
+---
+
+
+---
+
+
