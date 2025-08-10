@@ -11,7 +11,8 @@ import { useAudioAnalysis } from "@/hooks/useAudioAnalysis";
 import { useSpeech } from "@/hooks/useSpeech";
 import { useRiskEngine } from "@/hooks/useRiskEngine";
 import { useTTSAlert } from "@/components/vss/TTSAlert";
-import { Mic, StopCircle, ShieldAlert, Sparkles } from "lucide-react";
+import { useCallStream } from "@/hooks/useCallStream";
+import { Mic, StopCircle, ShieldAlert, Sparkles, Video } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 
 const Index = () => {
@@ -21,15 +22,18 @@ const Index = () => {
   const [showWidget, setShowWidget] = useState(false);
   const [enableTTS, setEnableTTS] = useState(true);
   const [volume, setVolume] = useState(0.6);
+  const [callMode, setCallMode] = useState<"voice" | "video">("voice");
 
   // Engines
   const { active, metrics, start: startAudio, stop: stopAudio } = useAudioAnalysis();
   const { status, interim, finalText, start: startSpeech, stop: stopSpeech, setFinalText } = useSpeech(lang);
   const { state, pushUpdate, reset } = useRiskEngine(lang);
   const { speak, stop: stopSpeak } = useTTSAlert();
+  const { stream, mode, start: startCall, stop: stopCall } = useCallStream();
 
   const lastAlertedRef = useRef<number>(0);
   const prevSeverityRef = useRef<number>(0);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
 
   const ttsMessages = useMemo(() => ({
     "en-US": "Attention: possible fraud detected. Do not share codes or personal information.",
@@ -40,7 +44,8 @@ const Index = () => {
   const startDetection = async () => {
     reset();
     setFinalText("");
-    await startAudio();
+    const s = await startCall(callMode);
+    await startAudio(s);
     await startSpeech();
     setRunning(true);
     setShowWidget(true);
@@ -50,6 +55,11 @@ const Index = () => {
     stopAudio();
     stopSpeech();
     stopSpeak();
+    stopCall();
+    if (videoRef.current) {
+      // @ts-ignore
+      videoRef.current.srcObject = null;
+    }
     setRunning(false);
   };
 
@@ -90,6 +100,24 @@ const Index = () => {
     }
     prevSeverityRef.current = current;
   }, [state.label, state.rationale]);
+
+  // Show toast if speech recognition unsupported
+  useEffect(() => {
+    if (status === "error") {
+      toast({
+        title: "Live transcript unavailable",
+        description: "Speech Recognition not supported; relying on audio heuristics.",
+      });
+    }
+  }, [status]);
+
+  // Attach stream to video element
+  useEffect(() => {
+    if (!videoRef.current) return;
+    // @ts-ignore
+    videoRef.current.srcObject = stream ?? null;
+    if (stream) videoRef.current.play().catch(() => {});
+  }, [stream]);
 
   // Signature interaction: soft spotlight follows cursor
   const heroRef = useRef<HTMLDivElement | null>(null);
@@ -176,9 +204,23 @@ const Index = () => {
                 </div>
               </div>
 
-              <div className="space-y-2">
-                <Label>Alert Volume</Label>
-                <Slider value={[Math.round(volume * 100)]} onValueChange={(v) => setVolume((v[0] ?? 60) / 100)} />
+              <div className="grid sm:grid-cols-2 gap-4 items-center">
+                <div className="space-y-2">
+                  <Label>Call Type</Label>
+                  <Select value={callMode} onValueChange={(v) => setCallMode(v as any)}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select type" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="voice">Voice call</SelectItem>
+                      <SelectItem value="video">Video call</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <Label>Alert Volume</Label>
+                  <Slider value={[Math.round(volume * 100)]} onValueChange={(v) => setVolume((v[0] ?? 60) / 100)} />
+                </div>
               </div>
 
               <Separator />
@@ -193,6 +235,12 @@ const Index = () => {
                 <span className="font-medium">Transcript: </span>
                 <span className="text-muted-foreground">{interim || finalText || "—"}</span>
               </div>
+
+              {running && callMode === "video" ? (
+                <div className="rounded-md border overflow-hidden">
+                  <video ref={videoRef} className="w-full aspect-video" autoPlay muted playsInline />
+                </div>
+              ) : null}
 
               <div className="flex gap-3">
                 {!running ? (

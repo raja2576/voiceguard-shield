@@ -33,9 +33,9 @@ export function useAudioAnalysis() {
     audioCtxRef.current = null;
   }, []);
 
-  const start = useCallback(async () => {
+  const start = useCallback(async (providedStream?: MediaStream) => {
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const stream = providedStream ?? (await navigator.mediaDevices.getUserMedia({ audio: true }));
       const audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
       const source = audioCtx.createMediaStreamSource(stream);
       const analyser = audioCtx.createAnalyser();
