@@ -12,6 +12,7 @@ import { useSpeech } from "@/hooks/useSpeech";
 import { useRiskEngine } from "@/hooks/useRiskEngine";
 import { useTTSAlert } from "@/components/vss/TTSAlert";
 import { Mic, StopCircle, ShieldAlert, Sparkles } from "lucide-react";
+import { toast } from "@/hooks/use-toast";
 
 const Index = () => {
   // UI state
@@ -28,6 +29,7 @@ const Index = () => {
   const { speak, stop: stopSpeak } = useTTSAlert();
 
   const lastAlertedRef = useRef<number>(0);
+  const prevSeverityRef = useRef<number>(0);
 
   const ttsMessages = useMemo(() => ({
     "en-US": "Attention: possible fraud detected. Do not share codes or personal information.",
@@ -66,14 +68,28 @@ const Index = () => {
     pushUpdate({ spoofScore: metrics.spoofScore });
   }, [active, metrics.spoofScore, pushUpdate]);
 
-  // Trigger discreet TTS on escalation
+  // Trigger discreet TTS on escalation (also on high Suspicious)
   useEffect(() => {
     const now = Date.now();
-    if (enableTTS && state.label === "Scam" && now - lastAlertedRef.current > 5000) {
+    const highSuspicious = state.label === "Suspicious" && state.score >= 50;
+    if (enableTTS && (state.label === "Scam" || highSuspicious) && now - lastAlertedRef.current > 4000) {
       speak({ text: ttsMessages[lang], lang, volume: volume, rate: 0.95 });
       lastAlertedRef.current = now;
     }
-  }, [state.label, enableTTS, speak, ttsMessages, lang, volume]);
+  }, [state.label, state.score, enableTTS, speak, ttsMessages, lang, volume]);
+
+  // Visual toast on severity increase
+  useEffect(() => {
+    const sevMap: Record<string, number> = { Safe: 0, Suspicious: 1, Scam: 2 };
+    const current = sevMap[state.label] ?? 0;
+    if (current > prevSeverityRef.current) {
+      toast({
+        title: current === 2 ? "High risk: possible fraud" : "Warning: suspicious activity",
+        description: state.rationale ? `Reason: ${state.rationale}` : undefined,
+      });
+    }
+    prevSeverityRef.current = current;
+  }, [state.label, state.rationale]);
 
   // Signature interaction: soft spotlight follows cursor
   const heroRef = useRef<HTMLDivElement | null>(null);
